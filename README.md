@@ -1,5 +1,9 @@
 # ARAIA-Podcast-Engine
-An automated podcast creator that fetches articles from RSS and lets GPT-4 summarize them, then sends it to MS text-to-speech. There after it mixes all article audio toghether with intro music to a podcast episodes, updates an html page and xml-feed and uploads everything to your web server.
+An automated podcast creator software that fetches articles from RSS and lets GPT-4 summarize them, then sends it to MS text-to-speech. After that, it mixes all article audio toghether with intro music to a podcast episodes, updates an html page and xml-feed and uploads everything to your web server.
+
+![araia](https://user-images.githubusercontent.com/10948066/231836806-8a325e43-9141-4733-8315-77d9251c8d06.jpg)
+
+The image above shows the web page that's created. If you want to see this live example you can visit https://svartatavlan.mickekring.se
 
 # Flow
 1. Fetches all articles from the RSS feeds of your choice
@@ -27,7 +31,8 @@ An automated podcast creator that fetches articles from RSS and lets GPT-4 summa
 5. Open the 'config.py' file and make all changes
 6. Open the 'main.py' file and make changes. My suggestion is to comment out all but the first function in the 'Main()' and make one function at a time work for you. There are still a lot of hard coded strings in the main.py file, so you'll have to do some digging. :)
 7. Import all Python modules that's needed (see the imports at the top)
-8. Run and (hopefully) enjoy.
+8. Complete the code with a 'while'-loop to make it run automatically
+9. Run and (hopefully) enjoy.
 
 # Disclaimer
 I'm not a coder, so don't judge me by my code :) 
