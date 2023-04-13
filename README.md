@@ -23,6 +23,9 @@ The image above shows the web page that's created. If you want to see this live 
 * An OpenAI API key
 * An Microsoft Azure API key
 
+# Written in?
+* Written in Python and tested with version 3.9
+
 # How-to?
 1. Download all files and folders
 2. In the Music folder, change the dummy files 'intro_music.mp3' and 'divider.mp3' to your intro music and divider (short clip to highlight that there's a new article) 
