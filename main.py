@@ -1,7 +1,7 @@
 
 
 ### ARAIA
-### Version: 1.0.0
+### Version: 1.0.1
 ### Author: Micke Kring
 ### Contact: jag@mickekring.se
 
@@ -10,7 +10,7 @@ import feedparser
 import requests
 from bs4 import BeautifulSoup
 import config as c
-import openai
+from openai import OpenAI
 import requests
 import json
 import os
@@ -23,11 +23,11 @@ import datetime
 import random
 import paramiko
 import pytz
+import newspaper
 
 import numpy as np
 
-
-openai.api_key = c.OPEN_AI_API_KEY
+client = OpenAI(api_key = c.OPEN_AI_API_KEY)
 
 db = TinyDB("db.json")
 episodes_table = db.table("episodes")
@@ -107,6 +107,9 @@ def get_article_text(url, source):
         
         elif source == "Inrikes | SVT Nyheter":
             editorial_div = soup.find('article', class_='nyh_article')
+
+        elif source == "Skola - Skola och Samhälle":
+            editorial_div = soup.find('div', class_='article')
         
         elif source == "Skola-arkiv - Spaningen":
             editorial_div = soup.find('div', class_='entry-content')
@@ -144,6 +147,11 @@ def get_article_text(url, source):
         elif editorial_div and source == "Skola-arkiv - Spaningen":
 
             for element in editorial_div.find_all(['p', 'h2']):
+                article_text += element.get_text()
+
+        elif editorial_div and source == "Skola - Skola och Samhälle":
+
+            for element in editorial_div.find_all('p'):
                 article_text += element.get_text()
 
         elif editorial_div and source == "Skolledaren":
@@ -227,10 +235,10 @@ def send_to_gpt():
         messages.append({"role": "user", "content": prompt_primer + "\n\n---\n" + full_text})
 
         try:
-            completion = openai.ChatCompletion.create(model="gpt-4", messages=messages)
+            completion = client.chat.completions.create(model="gpt-4", messages=messages)
             print("GPT-4")
         except:
-            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+            completion = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
             print("GPT-3")
 
         chat_response = completion.choices[0].message.content
@@ -339,7 +347,8 @@ def find_text_to_convert_to_speech():
                         'Chatboten': 'Chattbotten', 'RISE': 'Rajs', 'Rise': 'Rajs', 'heat': 'hit', 
                         'maps': 'kartor', '"': '', '&': 'och', 'Skola-arkiv - Spaningen': 'Spaningen.se',
                         'm.m.': 'med mera', 'Inrikes | SVT Nyheter': 'SVT Nyheter', 
-                        'RSS - Regeringen.se': 'Regeringen.se', 'Utbildning & skola-arkiv - forskning.se': 'Forskning.se'}
+                        'RSS - Regeringen.se': 'Regeringen.se', 'Utbildning & skola-arkiv - forskning.se': 'Forskning.se', 
+                        'Skola - Skola och Samhälle':'Skola och Samhälle'}
 
     for entry in entries_to_process:
 
@@ -849,7 +858,7 @@ def Main():
     unpublished_count = count_unpublished_entries()
     print(f"\n--- --- --- --- ---\n\nCHECKNING FOR NUMBER OF UNPUBLISHED ENTRIES: {unpublished_count}\n")
 
-    if unpublished_count < 7:
+    if unpublished_count < 6:
         print("Not enough new posts for a new episode. Exiting...\n\n")
     else:
         print(f"\n--- --- --- --- ---\n\nCREATING NEW EPISODE\n\n")
