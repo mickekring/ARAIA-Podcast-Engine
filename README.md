@@ -39,3 +39,7 @@ The image above shows the web page that's created. If you want to see this live 
 
 # Disclaimer
 I'm not a coder, so don't judge me by my code :) 
+
+# Updates
+* Nov 11, 2023 - 1.0.1 Changed calls to OpenAI API
+* 1.0.0 Initial upload
